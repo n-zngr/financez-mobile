@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import AddTransactionModal from '@/components/transactions/AddTransactionModal';
+import tw from 'twrnc';
 
 interface Transaction {
     id: string;
@@ -43,147 +38,37 @@ export default function Transactions() {
     
 
     return (
-        <View style={styles.container}>
-            <View style={styles.budgetContainer}>
-                <Text style={styles.budgetText}>Total Budget: ${budget.toFixed(2)}</Text>
-            </View>
-        
-            <ScrollView style={styles.transactionList}>
-                {transactions.map((transaction) => (
-                <View key={transaction.id} style={styles.transactionItem}>
-                    <Text style={styles.transactionName}>{transaction.name}</Text>
-                    <Text style={styles.transactionAmount}>
-                    {transaction.type === 'income' ? '+' : '-'} ${transaction.amount.toFixed(2)}
-                    </Text>
-                </View>
-                ))}
-            </ScrollView>
-        
-            <TouchableOpacity
-                style={styles.addButtonBottom}
-                onPress={() => setModalVisible(true)}
-            >
-                <Text style={styles.addButtonBottomText}>+</Text>
-            </TouchableOpacity>
-        
-            <AddTransactionModal
-                visible={modalVisible}
-                onClose={() => setModalVisible(false)}
-                onAdd={handleAddTransaction}
-            />
-        </View>
+        <View style={tw`flex-1 p-5 bg-gray-100`}>
+      <View style={tw`items-center mb-5`}>
+        <Text style={tw`text-2xl font-bold`}>Total Budget: ${budget.toFixed(2)}</Text>
+      </View>
+
+      <ScrollView style={tw`flex-1`}>
+        {transactions.map((transaction) => (
+          <View
+            key={transaction.id}
+            style={tw`flex-row justify-between p-3 border-b border-gray-300 bg-white`}
+          >
+            <Text style={tw`text-lg`}>{transaction.name}</Text>
+            <Text style={tw`text-lg font-bold`}>
+              {transaction.type === 'income' ? '+' : '-'} ${transaction.amount.toFixed(2)}
+            </Text>
+          </View>
+        ))}
+      </ScrollView>
+
+      <TouchableOpacity
+        style={tw`absolute bottom-5 right-5 bg-blue-500 w-14 h-14 rounded-full items-center justify-center shadow-lg`}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={tw`text-white text-4xl font-bold`}>+</Text>
+      </TouchableOpacity>
+
+      <AddTransactionModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onAdd={handleAddTransaction}
+      />
+    </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#f0f0f0',
-    },
-    budgetContainer: {
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    budgetText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    transactionList: {
-        flex: 1,
-    },
-    transactionItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        backgroundColor: 'white',
-    },
-    transactionName: {
-        fontSize: 16,
-    },
-    transactionAmount: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    addButtonBottom: {
-        position: 'absolute',
-        bottom: 20,
-        right: 20,
-        backgroundColor: 'blue',
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        elevation: 5,
-    },
-    addButtonBottomText: {
-        color: 'white',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-        width: 0,
-        height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        backgroundColor: 'white',
-        width: 200,
-    },
-    picker: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        backgroundColor: 'white',
-        width: 200,
-    },
-    addButton: {
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginTop: 10,
-        width: 100,
-    },
-    addButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    cancelButton: {
-        backgroundColor: 'gray',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginTop: 10,
-        width: 100,
-    },
-    cancelButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-});

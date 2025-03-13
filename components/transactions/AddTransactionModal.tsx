@@ -1,4 +1,5 @@
 import React from 'react';
+import tw from 'twrnc';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
@@ -24,109 +25,51 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ visible, onCl
             visible={visible}
             onRequestClose={onClose}
         >
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Picker
-                        selectedValue={newTransactionType}
-                        style={styles.picker}
-                        onValueChange={(itemValue) => setNewTransactionType(itemValue as 'income' | 'expense')}
-                    >
-                        <Picker.Item label="Expense" value="expense" />
-                        <Picker.Item label="Income" value="income" />
-                    </Picker>
-            
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Amount"
-                        keyboardType="numeric"
-                        value={newTransactionAmount}
-                        onChangeText={setNewTransactionAmount}
-                    />
-            
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Transaction Name"
-                        value={newTransactionName}
-                        onChangeText={setNewTransactionName}
-                    />
-            
-                    <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
-                        <Text style={styles.addButtonText}>Add</Text>
-                    </TouchableOpacity>
-            
-                    <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-                        <Text style={styles.cancelButtonText}>Cancel</Text>
-                    </TouchableOpacity>
+            <View style={tw`flex-1 justify-center items-center mt-5`}>
+                <View style={tw`m-5 bg-white rounded-2xl p-8 items-center shadow-lg w-80`}>
+                <Picker
+                    selectedValue={newTransactionType}
+                    style={tw`h-10 border border-gray-400 mb-2 bg-white w-52`}
+                    onValueChange={(itemValue) =>
+                    setNewTransactionType(itemValue as 'income' | 'expense')
+                    }
+                >
+                    <Picker.Item label="Expense" value="expense" />
+                    <Picker.Item label="Income" value="income" />
+                </Picker>
+
+                <TextInput
+                    style={tw`h-10 border border-gray-400 mb-2 p-2 bg-white w-52`}
+                    placeholder="Amount"
+                    keyboardType="numeric"
+                    value={newTransactionAmount}
+                    onChangeText={setNewTransactionAmount}
+                />
+
+                <TextInput
+                    style={tw`h-10 border border-gray-400 mb-2 p-2 bg-white w-52`}
+                    placeholder="Transaction Name"
+                    value={newTransactionName}
+                    onChangeText={setNewTransactionName}
+                />
+
+                <TouchableOpacity
+                    style={tw`bg-blue-500 p-2 rounded-md items-center mt-2 w-24`}
+                    onPress={handleAdd}
+                >
+                    <Text style={tw`text-white font-bold`}>Add</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={tw`bg-gray-400 p-2 rounded-md items-center mt-2 w-24`}
+                    onPress={onClose}
+                >
+                    <Text style={tw`text-white font-bold`}>Cancel</Text>
+                </TouchableOpacity>
                 </View>
             </View>
         </Modal>
-    );
-    
+    );    
 }
 
-const styles = StyleSheet.create({
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-        width: 0,
-        height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        backgroundColor: 'white',
-        width: 200,
-    },
-    picker: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        backgroundColor: 'white',
-        width: 200,
-    },
-    addButton: {
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginTop: 10,
-        width: 100,
-    },
-    addButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    cancelButton: {
-        backgroundColor: 'gray',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginTop: 10,
-        width: 100,
-    },
-    cancelButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-});
-  
 export default AddTransactionModal;
