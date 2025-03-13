@@ -1,14 +1,6 @@
 // camera.tsx
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  TextInput,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ScrollView } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 
 export default function Camera() {
