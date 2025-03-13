@@ -12,15 +12,15 @@ export default function LoginScreen() {
         setLoading(true);
 
         try {
-            const res = await fetch('https://domain/api/users/login', {
+            const response = await fetch('https://financez-v0.vercel.app/api/users/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
 
-            const data = await res.json();
+            const data = await response.json();
 
-            if (res.ok && data.token) {
+            if (response.ok && data.token) {
                 await login(data.token); // Stores token in AsyncStorage
             } else {
                 Alert.alert('Error', data.error || 'Login Failed');
@@ -28,6 +28,7 @@ export default function LoginScreen() {
         } catch (error) {
             Alert.alert('Error', 'Something went wrong, try again.');
         }
+        console.log(email, password);
         setLoading(false);
     };
 

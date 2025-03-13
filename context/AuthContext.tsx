@@ -11,7 +11,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(null);
+    const [token, setToken] = useState<string | null>("dummy-token");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -24,7 +24,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loadToken();
     }, []);
     
-
 
     const login = async (token: string) => {
         console.log("✅ Storing Token:", token); // ✅ Debug log
