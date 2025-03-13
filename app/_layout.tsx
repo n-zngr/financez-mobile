@@ -11,7 +11,9 @@ import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
+
 SplashScreen.preventAutoHideAsync();
+
 
 export default function RootLayout() {
     return (
