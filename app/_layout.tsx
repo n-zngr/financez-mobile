@@ -6,8 +6,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/components/useColorScheme';
-
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
@@ -27,14 +25,13 @@ export default function RootLayout() {
         ...FontAwesome.font,
     });
 
-    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
     useEffect(() => {
         if (error) throw error;
     }, [error]);
 
     useEffect(() => {
         if (loaded) {
-        SplashScreen.hideAsync();
+            SplashScreen.hideAsync();
         }
     }, [loaded]);
 
@@ -42,15 +39,10 @@ export default function RootLayout() {
         return null;
     }
 
-    return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-    const colorScheme = useColorScheme();
-
     return (
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ThemeProvider value={DarkTheme}>
             <Stack>
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
             </Stack>
