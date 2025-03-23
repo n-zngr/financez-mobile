@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "my-transaction-app",
-    "slug": "my-transaction-app",
-    "version": "1.0.0",
+    "name": "financez-mobile",
+    "slug": "financez-mobile",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
