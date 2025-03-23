@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import styles from '@/style/style';
+import mainStyle from '@/style/main.style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Signup = () => {
@@ -14,7 +14,7 @@ const Signup = () => {
 
     const handleSignup = async () => {
         try {
-            const response = await fetch (`https://financez-v0.vercel.app/api/users/signup`, {
+            const response = await fetch(`https://financez-v0.vercel.app/api/users/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -37,36 +37,36 @@ const Signup = () => {
     };
 
     return (
-        <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-            <Text style={styles.title}>Signup</Text>
+        <View style={[mainStyle.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+            <Text style={mainStyle.title}>Signup</Text>
             <TextInput
-                style={styles.input}
+                style={mainStyle.input}
                 placeholder="Full Name"
                 value={fullname}
                 onChangeText={setFullname}
             />
             <TextInput
-                style={styles.input}
+                style={mainStyle.input}
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
             />
             <TextInput
-                style={styles.input}
+                style={mainStyle.input}
                 placeholder="Password"
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
             />
             <TextInput
-                style={styles.input}
+                style={mainStyle.input}
                 placeholder="Country"
                 value={country}
                 onChangeText={setCountry}
             />
-            <TouchableOpacity style={styles.button} onPress={handleSignup}>
-                <Text style={styles.buttonText}>Signup</Text>
+            <TouchableOpacity style={mainStyle.button} onPress={handleSignup}>
+                <Text style={mainStyle.buttonText}>Signup</Text>
             </TouchableOpacity>
         </View>
     );
