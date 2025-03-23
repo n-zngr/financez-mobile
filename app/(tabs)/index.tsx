@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, FlatList, Modal, TextInput, Button, Alert, Touc
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { useRouter } from 'expo-router';
+import mainStyle from '@/style/main.style';
+import transactionStyle from '@/style/transactions.style';
 
 interface Transaction {
     _id: string;
@@ -70,49 +72,49 @@ export default function TransactionsPage() {
     };
     
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Transactions</Text>
+        <View style={transactionStyle.container}>
+            <Text style={transactionStyle.title}>Transactions</Text>
             <Button title="Add Transaction" onPress={() => setModalVisible(true)} />
 
             {transactions.length === 0 ? (
-                <View style={styles.noTransactions}>
-                    <Text>Create a transaction to view Transactions</Text>
+                <View style={transactionStyle.noTransactions}>
+                    <Text style={mainStyle.text}>Create a transaction to view Transactions</Text>
                 </View>
             ) : (
                 <FlatList
                     data={transactions}
                     keyExtractor={(item) => item._id.toString()}
                     renderItem={({ item }) => (
-                        <View style={styles.transactionItem}>
-                            <Text>{item.name}</Text>
-                            <Text>{item.type}</Text>
-                            <Text>${item.amount.toFixed(2)}</Text>
+                        <View style={transactionStyle.transactionItem}>
+                            <Text style={mainStyle.text}>{item.name}</Text>
+                            <Text style={mainStyle.text}>{item.type}</Text>
+                            <Text style={mainStyle.text}>${item.amount.toFixed(2)}</Text>
                         </View>
                     )}
                 />
             )}
 
             <Modal visible={modalVisible} animationType="slide">
-                <View style={styles.modalContainer}>
-                    <Text style={styles.modalTitle}>Add New Transaction</Text>
+                <View style={transactionStyle.modalContainer}>
+                    <Text style={transactionStyle.modalTitle}>Add New Transaction</Text>
                     <TextInput
-                        style={styles.input}
+                        style={transactionStyle.input}
                         placeholder="Name"
                         value={newTransaction.name}
                         onChangeText={(text) => setNewTransaction({ ...newTransaction, name: text })}
                     />
                     <TextInput
-                        style={styles.input}
+                        style={transactionStyle.input}
                         placeholder="Amount"
                         value={newTransaction.amount}
                         onChangeText={(text) => setNewTransaction({ ...newTransaction, amount: text })}
                         keyboardType="numeric"
                     />
-                    <View style={styles.typeButtons}>
-                        <TouchableOpacity style={[styles.typeButton, newTransaction.type === 'expense' && styles.selectedType]} onPress={() => setNewTransaction({ ...newTransaction, type: 'expense' })}>
+                    <View style={transactionStyle.typeButtons}>
+                        <TouchableOpacity style={[transactionStyle.typeButton, newTransaction.type === 'expense' && transactionStyle.selectedType]} onPress={() => setNewTransaction({ ...newTransaction, type: 'expense' })}>
                             <Text>Expense</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.typeButton, newTransaction.type === 'income' && styles.selectedType]} onPress={() => setNewTransaction({ ...newTransaction, type: 'income' })}>
+                        <TouchableOpacity style={[transactionStyle.typeButton, newTransaction.type === 'income' && transactionStyle.selectedType]} onPress={() => setNewTransaction({ ...newTransaction, type: 'income' })}>
                             <Text>Income</Text>
                         </TouchableOpacity>
                     </View>
@@ -123,55 +125,3 @@ export default function TransactionsPage() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    transactionItem: {
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 20,
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-    },
-    typeButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 10,
-    },
-    typeButton: {
-        padding: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-    },
-    selectedType: {
-        backgroundColor: 'lightblue',
-    },
-    noTransactions: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-});
