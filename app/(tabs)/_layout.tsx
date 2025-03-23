@@ -17,9 +17,8 @@ function TabBarIcon(props: {
 }) {
     return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
-  
+
 export default function RootLayout() {
-  
     useEffect(() => {
         const checkAuth = async () => {
             const token = await AsyncStorage.getItem('userToken');
@@ -29,50 +28,26 @@ export default function RootLayout() {
         };
         checkAuth();
     }, [router]);
-  
-    return (
-        <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack>
-    );
-}
-  
-export function TabsLayout() {
-    const colorScheme = useColorScheme();
 
     return (
         <Tabs
-            screenOptions={{
-                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-                headerShown: useClientOnlyValue(false, true),
-            }}
+        screenOptions={{
+            headerShown: true,
+        }}
         >
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: 'Tab One',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-                    headerRight: () => (
-                    <Pressable onPress={() => router.push('/modal')}>
-                        {({ pressed }) => (
-                        <FontAwesome
-                            name="info-circle"
-                            size={25}
-                            color={Colors[colorScheme ?? 'light'].text}
-                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                        />
-                        )}
-                    </Pressable>
-                    ),
+                title: 'Home',
+                tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
                 }}
             />
             <Tabs.Screen
-            name="two"
-            options={{
-                title: 'Tab Two',
-                tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-            }}
+                name="two"
+                options={{
+                title: 'Two',
+                tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
+                }}
             />
         </Tabs>
     );
