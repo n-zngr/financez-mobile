@@ -14,7 +14,7 @@ const Signup = () => {
 
     const handleSignup = async () => {
         try {
-            const response = await fetch (`http://localhost:3000/api/users/signup`, {
+            const response = await fetch (`https://financez-v0.vercel.app/api/users/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
