@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import styles from '@/style/style';
+import mainStyle from '@/style/main.style';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -35,29 +35,29 @@ const Login = () => {
     };
 
     return (
-        <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/(auth)/signup')}>
-        <Text style={styles.buttonText}>Signup</Text>
-      </TouchableOpacity>
-    </View>
+        <View style={mainStyle.container}>
+            <Text style={mainStyle.title}>Login</Text>
+            <TextInput
+                style={mainStyle.input}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+            />
+            <TextInput
+                style={mainStyle.input}
+                placeholder="Password"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+            />
+            <TouchableOpacity style={mainStyle.button} onPress={handleLogin}>
+                <Text style={mainStyle.buttonText}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={mainStyle.button} onPress={() => router.push('/(auth)/signup')}>
+                <Text style={mainStyle.buttonText}>Signup</Text>
+            </TouchableOpacity>
+        </View>
     )
 }
 
