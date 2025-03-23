@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import styles from '@/style/style';
-
-const DEV_IP = process.env.DEV_IP;
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -13,7 +11,7 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`http://${DEV_IP}:3000/api/users/login`, {
+            const response = await fetch(`http://localhost:3000/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
