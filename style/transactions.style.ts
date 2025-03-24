@@ -2,9 +2,19 @@ import { StyleSheet } from 'react-native';
 
 const transactionStyle = StyleSheet.create({
     container: {
+        justifyContent: 'center',
+        verticalAlign: 'bottom',
         flex: 1,
         padding: 20,
         backgroundColor: '#121212', // Dark background
+    },
+    closeButton: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 20,
+        backgroundColor: '#121212',
     },
     title: {
         fontSize: 24,
