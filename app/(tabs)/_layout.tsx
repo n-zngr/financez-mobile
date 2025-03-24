@@ -43,13 +43,6 @@ export default function RootLayout() {
                 }}
             />
             <Tabs.Screen
-                name="receipts"
-                options={{
-                title: 'Receipts',
-                tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
-                }}
-            />
-            <Tabs.Screen
                 name="account"
                 options={{
                 title: 'Account',
