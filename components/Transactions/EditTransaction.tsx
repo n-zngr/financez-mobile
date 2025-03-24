@@ -104,7 +104,7 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
             formData.append('transactionId', String(transactionId));
             formData.append('fileName', fileName);
 
-            const uploadResponse = await fetch('http://localhost:3000/api/receipts', {
+            const uploadResponse = await fetch('https://financez-v0.vercel.app/api/receipts', {
                 method: 'POST',
                 body: formData,
             });
