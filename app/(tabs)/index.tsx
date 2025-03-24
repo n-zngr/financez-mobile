@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, Modal, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Modal, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import EditScreenInfo from '@/components/EditScreenInfo';
 import { useRouter } from 'expo-router';
 import mainStyle from '@/style/main.style';
 import transactionStyle from '@/style/transactions.style';
@@ -23,6 +22,7 @@ export default function TransactionsPage() {
     const [newTransaction, setNewTransaction] = useState({ name: '', type: 'expense', amount: '' });
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
+    const [budget, setBudget] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -34,10 +34,11 @@ export default function TransactionsPage() {
             const userId = await AsyncStorage.getItem('userToken');
 
             if (userId) {
-                const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}`);
+                const response = await fetch(`https://financez-v0.vercel.app/api/transactions?userId=${userId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setTransactions(data);
+                    calculateBudget(data);
                 } else {
                     Alert.alert('Error', 'Failed to load transactions.');
                 }
@@ -48,11 +49,22 @@ export default function TransactionsPage() {
         }
     };
 
+    const calculateBudget = (transactions: Transaction[]) => {
+        const total = transactions.reduce((acc, transaction) => {
+            if (transaction.type === 'income') {
+                return acc + transaction.amount;
+            } else {
+                return acc - transaction.amount;
+            }
+        }, 0);
+        setBudget(total);
+    };
+
     const addTransaction = async () => {
         try {
             const userId = await AsyncStorage.getItem('userToken');
             if (userId) {
-                const response = await fetch('http://localhost:3000/api/transactions', {
+                const response = await fetch('https://financez-v0.vercel.app/api/transactions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -78,8 +90,6 @@ export default function TransactionsPage() {
     const openEditModal = (transactionId: string) => {
         setSelectedTransactionId(transactionId);
         setEditModalVisible(true);
-        console.log('TransactionId:', transactionId);
-        console.log('Selected Transaction Id:', selectedTransactionId);
     };
     
     const handleTransactionUpdated = () => {
@@ -90,6 +100,7 @@ export default function TransactionsPage() {
     return (
         <View style={transactionStyle.container}>
             <Text style={transactionStyle.title}>Transactions</Text>
+            <Text style={mainStyle.text}>Budget: ${budget.toFixed(2)}</Text>
             <Button title="Add Transaction" onPress={() => setAddModalVisible(true)} />
 
             {transactions.length === 0 ? (
@@ -141,10 +152,12 @@ export default function TransactionsPage() {
                 </View>
             </Modal>
 
-            <Modal visible={editModalVisible} animationType="slide">
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                {selectedTransactionId && <EditTransaction transactionId={selectedTransactionId} onTransactionUpdated={handleTransactionUpdated} />}
-                    <Button title="Close" onPress={() => setEditModalVisible(false)} />
+            <Modal style={transactionStyle.container} visible={editModalVisible} animationType="slide">
+                <View style={transactionStyle.container}>
+                    {selectedTransactionId && <EditTransaction transactionId={selectedTransactionId} onTransactionUpdated={handleTransactionUpdated} />}
+                    <View style={transactionStyle.closeButton}>
+                        <Button title="Close" onPress={() => setEditModalVisible(false)} />
+                    </View>
                 </View>
             </Modal>
         </View>
