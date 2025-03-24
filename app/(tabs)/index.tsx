@@ -5,20 +5,24 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 import { useRouter } from 'expo-router';
 import mainStyle from '@/style/main.style';
 import transactionStyle from '@/style/transactions.style';
+import EditTransaction from '@/components/Transactions/EditTransaction';
 
-interface Transaction {
+export interface Transaction {
     _id: string;
     userId: string;
     name: string;
     type: 'income' | 'expense';
     amount: number;
+    receiptFileId: string;
     createdAt: Date;
 }
 
 export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [addModalVisible, setAddModalVisible] = useState(false);
     const [newTransaction, setNewTransaction] = useState({ name: '', type: 'expense', amount: '' });
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -30,7 +34,7 @@ export default function TransactionsPage() {
             const userId = await AsyncStorage.getItem('userToken');
 
             if (userId) {
-                const response = await fetch(`https://financez-v0.vercel.app/api/transactions?userId=${userId}`);
+                const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setTransactions(data);
@@ -48,7 +52,7 @@ export default function TransactionsPage() {
         try {
             const userId = await AsyncStorage.getItem('userToken');
             if (userId) {
-                const response = await fetch('https://financez-v0.vercel.app/api/transactions', {
+                const response = await fetch('http://localhost:3000/api/transactions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -58,7 +62,7 @@ export default function TransactionsPage() {
 
                 if (response.ok) {
                     Alert.alert('Success', 'Transaction added successfully');
-                    setModalVisible(false);
+                    setAddModalVisible(false);
                     setNewTransaction({ name: '', type: 'expense', amount: '' });
                     loadTransactions();
                 } else {
@@ -70,11 +74,23 @@ export default function TransactionsPage() {
             Alert.alert('Error', 'An error occurred while adding transaction.');
         }
     };
+
+    const openEditModal = (transactionId: string) => {
+        setSelectedTransactionId(transactionId);
+        setEditModalVisible(true);
+        console.log('TransactionId:', transactionId);
+        console.log('Selected Transaction Id:', selectedTransactionId);
+    };
     
+    const handleTransactionUpdated = () => {
+        loadTransactions();
+        setEditModalVisible(false);
+    };
+
     return (
         <View style={transactionStyle.container}>
             <Text style={transactionStyle.title}>Transactions</Text>
-            <Button title="Add Transaction" onPress={() => setModalVisible(true)} />
+            <Button title="Add Transaction" onPress={() => setAddModalVisible(true)} />
 
             {transactions.length === 0 ? (
                 <View style={transactionStyle.noTransactions}>
@@ -85,16 +101,18 @@ export default function TransactionsPage() {
                     data={transactions}
                     keyExtractor={(item) => item._id.toString()}
                     renderItem={({ item }) => (
-                        <View style={transactionStyle.transactionItem}>
-                            <Text style={mainStyle.text}>{item.name}</Text>
-                            <Text style={mainStyle.text}>{item.type}</Text>
-                            <Text style={mainStyle.text}>${item.amount.toFixed(2)}</Text>
-                        </View>
+                        <TouchableOpacity onPress={() => openEditModal(item._id)}>
+                            <View style={transactionStyle.transactionItem}>
+                                <Text style={mainStyle.text}>{item.name}</Text>
+                                <Text style={mainStyle.text}>{item.type}</Text>
+                                <Text style={mainStyle.text}>${item.amount.toFixed(2)}</Text>
+                            </View>
+                        </TouchableOpacity>
                     )}
                 />
             )}
 
-            <Modal visible={modalVisible} animationType="slide">
+            <Modal visible={addModalVisible} animationType="slide">
                 <View style={transactionStyle.modalContainer}>
                     <Text style={transactionStyle.modalTitle}>Add New Transaction</Text>
                     <TextInput
@@ -119,7 +137,14 @@ export default function TransactionsPage() {
                         </TouchableOpacity>
                     </View>
                     <Button title="Add" onPress={addTransaction} />
-                    <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                    <Button title="Cancel" onPress={() => setAddModalVisible(false)} />
+                </View>
+            </Modal>
+
+            <Modal visible={editModalVisible} animationType="slide">
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                {selectedTransactionId && <EditTransaction transactionId={selectedTransactionId} onTransactionUpdated={handleTransactionUpdated} />}
+                    <Button title="Close" onPress={() => setEditModalVisible(false)} />
                 </View>
             </Modal>
         </View>
