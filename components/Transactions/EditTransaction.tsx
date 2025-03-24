@@ -28,7 +28,7 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
         try {
             const userId = await AsyncStorage.getItem('userToken');
             if (userId && transactionId) {
-                const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}`);
+                const response = await fetch(`https://financez-v0.vercel.app/api/transactions?userId=${userId}`);
                 if (response.ok) {
                     const data: Transaction[] = await response.json();
                     const foundTransaction = data.find((item) => item._id === transactionId);
@@ -55,7 +55,7 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
 
     const fetchReceiptImage = async (fileId: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/receipts?fileId=${fileId}`);
+            const response = await fetch(`https://financez-v0.vercel.app/api/receipts?fileId=${fileId}`);
             if (response.ok) {
                 const blob = await response.blob();
                 const imageUri = URL.createObjectURL(blob);
@@ -125,7 +125,7 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
         try {
             const userId = await AsyncStorage.getItem('userToken');
             if (userId && transactionId && transaction) {
-                const response = await fetch(`http://localhost:3000/api/transactions/${transactionId}`, {
+                const response = await fetch(`https://financez-v0.vercel.app/api/transactions/put?transactionId=${transactionId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
