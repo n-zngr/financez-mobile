@@ -49,6 +49,13 @@ export default function RootLayout() {
                 tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
                 }}
             />
+            <Tabs.Screen
+                name="account"
+                options={{
+                title: 'Account',
+                tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                }}
+            />
         </Tabs>
     );
 }
