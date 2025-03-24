@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import transactionStyle from '@/style/transactions.style';
 import { Transaction } from '@/app/(tabs)';
+import mainStyle from '@/style/main.style';
 
 interface EditTransactionProps {
     transactionId: string;
@@ -110,6 +111,11 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
             });
 
             if (uploadResponse.ok) {
+                const receiptData = await uploadResponse.json();
+                const newReceiptFileId = receiptData.fileId;
+
+                await updateTransactionReceipt(newReceiptFileId);
+
                 Alert.alert('Receipt uploaded successfully!');
                 router.push('/');
             } else {
@@ -121,20 +127,40 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
         }
     };
 
+    const updateTransactionReceipt = async (receiptFileId: string) => {
+        try {
+            const response = await fetch(`https://financez-v0.vercel.app/api/transactions/put?transactionId=${transactionId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    receiptFileId: receiptFileId,
+                }),
+            });
+
+            if (response.ok) {
+                console.log('Transaction receipt updated successfully.');
+            } else {
+                console.error('Failed to update transaction receipt.');
+            }
+        } catch (error) {
+            console.error('Error updating transaction receipt:', error);
+        }
+    };
+    
     const saveChanges = async () => {
         try {
-            const userId = await AsyncStorage.getItem('userToken');
-            if (userId && transactionId && transaction) {
+            if (transactionId && transaction) {
                 const response = await fetch(`https://financez-v0.vercel.app/api/transactions/put?transactionId=${transactionId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        userId: userId,
-                        amount: parseFloat(editedAmount),
-                        type: editedType,
                         name: editedName,
+                        type: editedType,
+                        amount: parseFloat(editedAmount),
                     }),
                 });
 
@@ -142,7 +168,8 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
                     Alert.alert('Success', 'Transaction updated successfully!');
                     onTransactionUpdated();
                 } else {
-                    Alert.alert('Error', 'Failed to update transaction.');
+                    const errorData = await response.json();
+                    Alert.alert('Error', `Failed to update transaction: ${errorData.error || 'Unknown error'}`);
                 }
             }
         } catch (error) {
@@ -152,8 +179,11 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
     };
 
     if (!transaction) {
-        return <Text>Loading...</Text>;
+        return (
+            <Text style={mainStyle.text}>Loading...</Text>
+        );
     }
+
 
     return (
         <View style={transactionStyle.modalContainer}>
@@ -189,7 +219,7 @@ export default function EditTransaction({ transactionId, onTransactionUpdated }:
                 </TouchableOpacity>
             </View>
 
-            <Button title="Take Receipt" onPress={pickImage} />
+            <Button title="Take Image" onPress={pickImage} />
             {selectedImage && <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />}
             <Button title="Upload Receipt" onPress={uploadReceipt} />
 
