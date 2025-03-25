@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "my-transaction-app",
-    "slug": "my-transaction-app",
-    "version": "1.0.0",
+    "name": "financez-mobile",
+    "slug": "financez-mobile",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#121212"
     },
     "ios": {
       "supportsTablet": true
@@ -19,8 +19,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#121212"
+      },
+      "package": "com.nzngr.financezmobile"
     },
     "web": {
       "bundler": "metro",
@@ -32,6 +33,18 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "permissions": [
+      "CAMERA"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e45ae61e-edaa-430a-a871-24f77e92f527"
+      }
+    },
+    "owner": "n-zngr"
   }
 }
